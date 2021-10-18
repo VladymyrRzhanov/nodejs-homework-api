@@ -1,15 +1,65 @@
-// const fs = require('fs/promises')
-// const contacts = require('./contacts.json')
+const crypto = require('crypto');
+const DB = require('./db');
+const db = new DB('contacts.json');
 
-const listContacts = async () => {}
+const readContacts = async () => {
+  return await db.read()
+}
 
-const getContactById = async (contactId) => {}
+const listContacts = () => {
+  return readContacts()
+};
 
-const removeContact = async (contactId) => {}
+const getContactById = async (contactId) => {
+  const contacts = await readContacts();
+  const contact = contacts.find(contact => contact.id === contactId);
+  return contact;
+}
 
-const addContact = async (body) => {}
+const removeContact = async (contactId) => {
+  const contacts = await readContacts();
+  const index = contacts.findIndex(contact => contact.id === contactId);
+  if (index !== -1) {
+    const result = contacts.splice(index, 1);
+    await db.write(contacts);
+    return result;
+  }
+  return null;
+}
 
-const updateContact = async (contactId, body) => {}
+const addContact = async (body) => {
+  const contacts = await readContacts();
+  const newContact = {
+    id: crypto.randomUUID(),
+    favourite: false,
+    ...body
+  }
+  contacts.push(newContact);
+  await db.write(contacts);
+  return newContact;
+};
+
+const updateContact = async (contactId, body) => {
+  const contacts = await readContacts();
+  const index = contacts.findIndex(contact => contact.id === contactId);
+  if (index !== -1) {
+    contacts[index] = { ...contacts[index], ...body };
+    await db.write(contacts);
+    return contacts[index];
+  }
+  return null;
+};
+
+const updateContactStatus = async (contactId, body) => {
+  const contacts = await readContacts();
+  const index = contacts.findIndex(contact => contact.id === contactId);
+  if (index !== -1) {
+    contacts[index] = { ...contacts[index], ...body };
+    await db.write(contacts);
+    return contacts[index];
+  }
+  return null;
+};
 
 module.exports = {
   listContacts,
@@ -17,4 +67,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  updateContactStatus
 }

@@ -1,35 +1,38 @@
-const Joi = require('joi');
+const Joi = require('joi')
+Joi.objectId = require('joi-objectid')(Joi);
+const HttpCodeRes = require('../config/constant');
 
 const schemaContact = Joi.object({
-    "name": Joi.string().replace(/\s/g, "").alphanum().min(1).max(20).required(),
-    "email": Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
-    "phone": Joi.string().pattern(/^(\+)?(\(\d{2,3}\) ?\d|\d)(([ \-]?\d)|( ?\(\d{2,3}\) ?)){5,12}\d$/).required(),
-    "favourite": Joi.boolean().optional()
+    name: Joi.string().replace(/\s/g, "").min(1).max(20).required(),
+    email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
+    phone: Joi.string().pattern(/^(\+)?(\(\d{2,3}\) ?\d|\d)(([ \-]?\d)|( ?\(\d{2,3}\) ?)){5,12}\d$/).required(),
+    favourite: Joi.boolean().optional(),
 });
 
 const schemaUpdateContact = Joi.object({
-    "name": Joi.string().replace(/\s/g, "").alphanum().min(1).max(20).optional(),
-    "email": Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).optional(),
-    "phone": Joi.string().pattern(/^(\+)?(\(\d{2,3}\) ?\d|\d)(([ \-]?\d)|( ?\(\d{2,3}\) ?)){5,12}\d$/).optional(),
-    "favourite": Joi.boolean().optional()
+    name: Joi.string().replace(/\s/g, "").alphanum().min(1).max(20).optional(),
+    email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).optional(),
+    phone: Joi.string().pattern(/^(\+)?(\(\d{2,3}\) ?\d|\d)(([ \-]?\d)|( ?\(\d{2,3}\) ?)){5,12}\d$/).optional(),
+    favourite: Joi.boolean().optional()
 });
 
 const schemaUpdateContactStatus = Joi.object({
-    "favourite": Joi.boolean().required()
+    favourite: Joi.boolean()
 });
-const pattern = '\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w{12}'
 
 const schemaContactId = Joi.object({
-    id: Joi.string().pattern(new RegExp(pattern)).required()
+    id: Joi.objectId().required(),
 });
 
 const validate = async (schema, obj, res, next) => {
     try {
         await schema.validateAsync(obj);
         next()
-    }
-    catch (err) {
-        res.status(400).json({ status: 'error', code: 400, message: "Missing required name field" });
+    } catch (err) {
+        res.status(400).json({
+            status: 'error', code: HttpCodeRes.BAD_REQUEST,
+            message: "Missing required name field"
+        });
     }
 };
 

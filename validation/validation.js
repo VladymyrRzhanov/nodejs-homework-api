@@ -1,6 +1,6 @@
 const Joi = require('joi')
 Joi.objectId = require('joi-objectid')(Joi);
-const HttpCodeRes = require('../config/constant');
+const {HttpCodeRes} = require('../config/constants');
 
 const schemaContact = Joi.object({
     name: Joi.string().replace(/\s/g, "").min(1).max(20).required(),

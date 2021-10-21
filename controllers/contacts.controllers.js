@@ -1,5 +1,5 @@
 const Contacts = require('../repository/contacts');
-const HttpCodeRes = require('../config/constant');
+const {HttpCodeRes} = require('../config/constants');
 
 const getContacts = async (req, res, next) => {
   try {

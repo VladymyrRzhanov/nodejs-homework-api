@@ -9,7 +9,7 @@ const guard = (req, res, next) => {
             return res.status(HttpCodeRes.UNAUTHORIZED).json({
                 status: 'error',
                 code: HttpCodeRes.UNAUTHORIZED,
-                message: 'Invalid credentials'
+                message: 'Not authorized'
             });
         }
         req.user = user;

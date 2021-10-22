@@ -1,4 +1,5 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model, SchemaTypes } = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate-v2');
 
 const option =
 {
@@ -15,22 +16,28 @@ const option =
 
 const contactSchema = new Schema({
     name: {
-        type: String,
+        type: SchemaTypes.String,
         required: [true, 'Set name for contact']
     },
     email: {
-        type: String,
+        type: SchemaTypes.String,
     },
     phone: {
-        type: String,
+        type: SchemaTypes.String,
+    },
+    owner: {
+        type: SchemaTypes.ObjectId,
+        ref: 'user',
     },
     favourite: {
-        type: Boolean,
+        type: SchemaTypes.Boolean,
         default: false,
     },
 },
     option
 );
+
+contactSchema.plugin(mongoosePaginate);
 
 const Contact = model('contact', contactSchema);
 

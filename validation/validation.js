@@ -1,17 +1,17 @@
 const Joi = require('joi')
 Joi.objectId = require('joi-objectid')(Joi);
-const HttpCodeRes = require('../config/constant');
+const {HttpCodeRes} = require('../config/constants');
 
 const schemaContact = Joi.object({
     name: Joi.string().replace(/\s/g, "").min(1).max(20).required(),
-    email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
+    email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: true } }).required(),
     phone: Joi.string().pattern(/^(\+)?(\(\d{2,3}\) ?\d|\d)(([ \-]?\d)|( ?\(\d{2,3}\) ?)){5,12}\d$/).required(),
     favourite: Joi.boolean().optional(),
 });
 
 const schemaUpdateContact = Joi.object({
     name: Joi.string().replace(/\s/g, "").alphanum().min(1).max(20).optional(),
-    email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).optional(),
+    email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: true } }).optional(),
     phone: Joi.string().pattern(/^(\+)?(\(\d{2,3}\) ?\d|\d)(([ \-]?\d)|( ?\(\d{2,3}\) ?)){5,12}\d$/).optional(),
     favourite: Joi.boolean().optional()
 });
@@ -29,7 +29,7 @@ const validate = async (schema, obj, res, next) => {
         await schema.validateAsync(obj);
         next()
     } catch (err) {
-        res.status(400).json({
+        res.status(HttpCodeRes.BAD_REQUEST).json({
             status: 'error', code: HttpCodeRes.BAD_REQUEST,
             message: "Missing required name field"
         });

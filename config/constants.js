@@ -8,6 +8,7 @@ const HttpCodeRes = {
     FORBIDDEN: 403,
     NOT_FOUND: 404,
     CONFLICT: 409,
+    TOO_MANY_REQUESTS: 429,
     SERVER_ERROR: 500
 };
 
@@ -17,4 +18,13 @@ const SubscriptionType = {
     BUSINESS: "business"
 }
 
-module.exports = { HttpCodeRes, SubscriptionType };
+const Limiter = {
+    LIMITER_MAX_REQUESTS: 3,
+    LIMITER_TIME: 15 * 60 * 1000
+};
+
+const ExpressJsonParams = {
+    LIMIT: 10000
+}
+
+module.exports = { HttpCodeRes, SubscriptionType, Limiter, ExpressJsonParams };

@@ -28,11 +28,6 @@ app.use((_req, res) => {
 });
 
 app.use((err, _req, res, _next) => {
-  if (err.name === 'ValidationError') {
-    return res
-      .status(HttpCodeRes.BAD_REQUEST)
-      .json({ status: 'fail', code: HttpCodeRes.BAD_REQUEST, message: err.message });
-  }
   res
     .status(HttpCodeRes.SERVER_ERROR)
     .json({ status: 'fail', code: HttpCodeRes.SERVER_ERROR, message: err.message });

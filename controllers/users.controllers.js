@@ -1,8 +1,12 @@
 const Users = require('../repository/users');
 const { HttpCodeRes } = require('../config/constants');
 const jwt = require('jsonwebtoken');
+const path = require('path');
+const UploadAvatarFile = require('../services/file-upload.service');
 require('dotenv').config();
 const SECRET_KEY = process.env.JWT_SECRET_KEY;
+const mkdirp = require('mkdirp');
+
 
 const getCurrentUser = async (req, res, next) => {
     const user = await Users.findByEmail(req.user.email);
@@ -12,7 +16,8 @@ const getCurrentUser = async (req, res, next) => {
             code: HttpCodeRes.SUCCESS,
             user: {
                 email: user.email,
-                subscription: user.subscription
+                subscription: user.subscription,
+                avatarUrl: user.avatar
             }
         });
     } catch (error) {
@@ -33,7 +38,8 @@ const signUp = async (req, res, next) => {
             code: HttpCodeRes.SUCCESS_CREATE,
             user: {
                 email: newUser.email,
-                subscription: newUser.subscription
+                subscription: newUser.subscription,
+                avatar: newUser.avatar
             }
         });
     } catch (error) {
@@ -88,10 +94,29 @@ const updateUserSubscription = async (req, res, next) => {
     }
 }
 
+const uploadAvatar = async (req, res, next) => {
+    const id = String(req.user._id);
+    const file = req.file;
+    const AVATARS_DIR = process.env.AVATARS_DIR;
+    const destination = path.join(AVATARS_DIR, id);
+    await mkdirp(destination);
+    const uploadService = new UploadAvatarFile(destination);
+    const avatarUrl = await uploadService.save(file, id);
+    await Users.updateAvatar(id, avatarUrl);
+    return res.status(HttpCodeRes.SUCCESS).json({
+        status: 'success',
+        code: HttpCodeRes.SUCCESS,
+        user: {
+            avatarUrl
+        }
+    });
+};
+
 module.exports = {
     signUp,
     signIn,
     signOut,
     getCurrentUser,
-    updateUserSubscription
+    updateUserSubscription,
+    uploadAvatar
 }

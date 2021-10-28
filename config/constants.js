@@ -25,6 +25,10 @@ const Limiter = {
 
 const ExpressJsonParams = {
     LIMIT: 10000
-}
+};
 
-module.exports = { HttpCodeRes, SubscriptionType, Limiter, ExpressJsonParams };
+const UploadStorage = {
+    LIMIT_SIZE: 2000000
+};
+
+module.exports = { HttpCodeRes, SubscriptionType, Limiter, ExpressJsonParams, UploadStorage };

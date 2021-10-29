@@ -1,4 +1,4 @@
-const express = require('express')
+const express = require('express');
 const router = express.Router();
 const { SignUpValidate, SignInValidate, UserUpdateSubscriptionValidate } = require('../../validation/usersValidation');
 

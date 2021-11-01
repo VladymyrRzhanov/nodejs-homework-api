@@ -22,11 +22,17 @@ const updateSubscription = async (id, newSubscription) => {
     return result
 };
 
+const updateAvatar = async (id, avatar) => {
+    const result = await User.findOneAndUpdate({ _id: id }, { avatar });
+    return result
+};
+
 
 module.exports = {
     findById,
     findByEmail,
     create,
     updateToken,
-    updateSubscription
+    updateSubscription,
+    updateAvatar
 };

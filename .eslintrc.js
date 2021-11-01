@@ -3,6 +3,7 @@ module.exports = {
     commonjs: true,
     es2021: true,
     node: true,
+    'jest/global':true,
   },
   extends: ['standard', 'prettier'],
   parserOptions: {

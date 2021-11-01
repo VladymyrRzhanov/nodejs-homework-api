@@ -1,6 +1,6 @@
 const Contacts = require('../repository/contacts');
 const { HttpCodeRes } = require('../config/constants');
-const {CustomError}=require('../helpers/customError')
+const { CustomError } = require('../helpers/customError');
 
 const getContacts = async (req, res) => {
     const userId = req.user._id;
@@ -35,7 +35,11 @@ const deleteContact = async (req, res,) => {
 const updateContact = async (req, res) => {
     const userId = req.user._id;
     if (Object.keys(req.body).length === 0) {
-        return res.status(HttpCodeRes.BAD_REQUEST).json({ status: 'error', code: HttpCodeRes.BAD_REQUEST, message: "Missing fields" });
+        return res.status(HttpCodeRes.BAD_REQUEST).json({
+            status: 'error',
+            code: HttpCodeRes.BAD_REQUEST,
+            message: "Missing fields"
+        });
     }
     const contact = await Contacts.updateContact(req.params.id, req.body, userId);
     if (contact) {

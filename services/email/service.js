@@ -23,22 +23,24 @@ class EmailService {
         const mailGenerator = new Mailgen({
             theme: 'cerberus',
             product: {
-                name: 'Mailgen',
+                name: 'Phonebook',
                 link: this.link
             }
         });
 
         const email = {
             body: {
-                intro: "Welcome to Phonebook! We're very excited to have you on board.",
+                intro: "Welcome to Phonebook! We're happy you signed up to us.",
                 action: {
-                    instructions: 'To get started with Mailgen, please click here:',
+                    instructions: 'This link will verify your email address, and then you&#8217;ll officially be a part of the Phonebook community.',
                     button: {
-                        color: '#22BC66', // Optional action button color
-                        text: 'Confirm your account',
-                        link: `${this.link}/api/users/verify/${verifyToken}`
+                        color: '#fda65c',
+                        text: 'Verify your email address',
+                        link: `${this.link}/api/users/verify/${verifyToken}`,
+                        logo: 'https://cdn4.iconfinder.com/data/icons/business-finance-vol-12-2/512/1-512.png'
                     }
                 },
+                outro: 'See you there! Best regards, the Phonebook team'
             }
         };
         return mailGenerator.generate(email)

@@ -1,7 +1,8 @@
 const multer = require('multer');
 require('dotenv').config();
 const { UploadStorage } = require('../config/constants');
-const {CustomError}=require('./customError')
+const { CustomError } = require('./customError');
+
 const UPLOAD_DIR = process.env.UPLOAD_DIR;
 
 const storage = multer.diskStorage({

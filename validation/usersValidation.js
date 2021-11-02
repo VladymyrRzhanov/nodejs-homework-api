@@ -13,8 +13,12 @@ const schemaSignInUser = Joi.object({
     password: Joi.string().pattern(/[0-9a-zA-Z!@#$%^&*]{6,}/).required().error(new Error('Password must be at least 6 characters')),
 });
 
+const schemaResendingVerifyEmail = Joi.object({
+    email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: true } }).required().error(new Error('Missing required field email')),
+});
+
 const schemaUpdateUserSubscription = Joi.object({
-    subscription: Joi.string().insensitive().valid(SubscriptionType.STARTER, SubscriptionType.PRO, SubscriptionType.BUSINESS).required().error(new Error('Subscription must be one of [starter, pro, business]'))
+    subscription: Joi.string().insensitive().valid(SubscriptionType.STARTER, SubscriptionType.PRO, SubscriptionType.BUSINESS).required().error(new Error('Subscription must be one of starter, pro, business'))
 });
 
 const validate = async (schema, obj, res, next) => {
@@ -39,4 +43,8 @@ module.exports.SignInValidate = async (req, res, next) => {
 
 module.exports.UserUpdateSubscriptionValidate = async (req, res, next) => {
     return await validate(schemaUpdateUserSubscription, req.body, res, next)
+};
+
+module.exports.VerifyEmailValidate = async (req, res, next) => {
+    return await validate(schemaResendingVerifyEmail, req.body, res, next)
 };

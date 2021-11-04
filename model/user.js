@@ -1,12 +1,12 @@
-const { Schema, model, SchemaTypes } = require('mongoose');
 const gravatar = require('gravatar');
-const { SubscriptionType } = require('../config/constants');
 const bcrypt = require('bcryptjs');
+const { v4: uuidv4 } = require('uuid');
+const { Schema, model, SchemaTypes } = require('mongoose');
+const { SubscriptionType } = require('../config/constants');
 
 const SALT_FACTOR = 6;
 
-const option =
-{
+const option = {
     versionKey: false,
     timestamps: true,
     toJSON: {
@@ -34,8 +34,8 @@ const userSchema = new Schema({
     },
     subscription: {
         type: SchemaTypes.String,
-    enum: [SubscriptionType.STARTER, SubscriptionType.PRO, SubscriptionType.BUSINESS],
-    default: SubscriptionType.STARTER
+        enum: [SubscriptionType.STARTER, SubscriptionType.PRO, SubscriptionType.BUSINESS],
+        default: SubscriptionType.STARTER
     },
     token: {
         type: SchemaTypes.String,
@@ -46,6 +46,15 @@ const userSchema = new Schema({
         default: function () {
             return gravatar.url(this.email, { s: '250' }, true);
         }
+    },
+    verify: {
+        type: Boolean,
+        default: false,
+    },
+    verifyToken: {
+        type: String,
+        required: [true, 'Verify token is required'],
+        default: uuidv4()
     }
 },
     option
